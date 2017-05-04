@@ -1,24 +1,46 @@
-#include "Car.h"
 #include <iostream>
+#include "Car.h"
 
 using namespace std;
 
-Car::Car(int x) {
-    positionX = x;
+Car::Car() // Instantiate initial position (x,y) = (0,0)
+{
+    indexX = 0;
+    indexY = 0;
 }
 
 Car::~Car() {
 }
 
-void Car::moveForward(int step) {
-    positionX += step;
+/*
+///////// Motion ///////////
+void Car::forwardSpeed(int velo = 0) { // Size of the step is represent velocity
+    indexX += velo;
+    indexY += velo;
 }
-void Car::moveBackward(int step) {
-    positionX -= step;
+
+void Car::backwardSpeed(int veloX = 0, int veloY = 0) {
+    indexX -= veloX;
+    indexX -= veloY;
 }
-void Car::printPos(int map[]) { //
-    cout << map[positionX] << endl;
+////////////////////////////
+*/
+
+
+
+///////// Position Info ///////////
+int Car::getIndexX() {              // Report index X in the array
+    return indexX;
 }
-int Car::returnPos() {
-    return positionX;
+
+int Car::getIndexY() {              // Report index Y in the array
+    return indexY;
 }
+
+int Car::printPosX(int mapX[]) { // Report value X at index X in the array
+    return mapX[indexX];
+}
+int Car::printPosY(int mapY[]) { // Report value Y at index Y  in the array
+    return mapY[indexY];
+}
+////////////////////////////
