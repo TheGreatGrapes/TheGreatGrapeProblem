@@ -1,6 +1,8 @@
 #ifndef CAR_H
 #define CAR_H
 
+extern int dist;
+
 class Car {
 
 
@@ -10,8 +12,10 @@ public:
     ~Car();
 
     //////////// Members ////////////
-    int indexX;
-    int indexY;
+    double indexX;
+    double indexY;
+    double Acc;
+    double VMAX;
 
 
     ////////// Position Info //////////

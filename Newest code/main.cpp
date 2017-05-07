@@ -48,7 +48,7 @@
  *      2. is actually an update center, updating the position of the imported object.
  *      3. E.g. 
  * 
- *         yEqualsZero(Car* obj, int velo, bool dir)
+ *         yEquals_0(Car* obj, int velo, bool dir)
  *          ＾               ＾       ＾          ＾
  *     Name of street     Object   Velocity   Forward/Backward
  *      
@@ -78,7 +78,9 @@ using namespace std;
 
 static int counter = 0;       
 
-const int simulationTime = 50;  
+const int simulationTime = 10;  
+
+int dist = 120; //Dist between streets
 
 int main() {
     ////////////////////Ignore below commented code ////////////////////
@@ -116,8 +118,11 @@ int main() {
 
     /////////////////////////////////////////////////////////////////////
 
-    ////////////////////////// Simulation Starts///////////////////////////
+    //m->yEquals_0(a_ptr, 1);
 
+    
+    ////////////////////////// Simulation Starts///////////////////////////
+    
     do {
         counter += 1;
         chooseFourPath = rand() % 4;  // Generate number from 0,1,2,3
@@ -125,79 +130,81 @@ int main() {
         chooseTwoPath = rand() % 2;   // Generate number from 0,1
         
     ////////////////////// set up checking points ////////////////////////
+        
         if(a.check(0, 0)) {
             switch(chooseTwoPath) {
-            case 0: {m->yEqualsZero(a_ptr, 1, 1);break;}
-            case 1: {m->xEqualsZero(a_ptr, 1, 1);break;}
+            case 0: {m->yEquals_0(a_ptr, 1);break;}
+            case 1: {m->xEquals_0(a_ptr, 1);break;}
             default: { cout << "Something is wrong with 0,0!" << endl; }
             }
         }
-        if(a.check(5, 0)) {
+        
+        if(a.check(120, 0)) {
             switch(chooseThreePath) {
-            case 0: {m->xEqualsFive(a_ptr, 1, 1);break;}
-            case 1: {m->yEqualsZero(a_ptr, 1, 1);break;}
-            case 2: {m->yEqualsZero(a_ptr, 1, 0);break;}
+            case 0: {m->xEquals_120(a_ptr, 1);break;}
+            case 1: {m->yEquals_0(a_ptr, 1);break;}
+            case 2: {m->yEquals_0(a_ptr, 0);break;}
             default: { cout << "Something is wrong with 5,0!" << endl; }
             }
         }
-        if(a.check(10, 0)){
+        if(a.check(240, 0)){
             switch(chooseTwoPath){
-            case 0: {m->yEqualsZero(a_ptr, 1, 0);break;}
-            case 1: {m->xEqualsTen(a_ptr, 1, 1);break;}
+            case 0: {m->yEquals_0(a_ptr, 0);break;}
+            case 1: {m->xEquals_240(a_ptr, 1);break;}
             default: { cout << "Something is wrong with 10,0!" << endl; }
             }
         }
-        if(a.check(0, 5)){
+        if(a.check(0, 120)){
             switch(chooseThreePath){
-            case 0: {m->xEqualsZero(a_ptr, 1, 1);break;}
-            case 1: {m->xEqualsZero(a_ptr, 1, 0);break;}
-            case 2: {m->yEqualsFive(a_ptr, 1, 1);break;}
+            case 0: {m->xEquals_0(a_ptr, 1);break;}
+            case 1: {m->xEquals_0(a_ptr, 0);break;}
+            case 2: {m->yEquals_120(a_ptr, 1);break;}
             default: { cout << "Something is wrong with 0,5!" << endl; }
             }            
         }
-        if(a.check(5,5)){
+        if(a.check(120 ,120)){
             switch(chooseFourPath){
-            case 0: {m->xEqualsFive(a_ptr, 1, 1);break;}
-            case 1: {m->xEqualsFive(a_ptr, 1, 0);break;}
-            case 2: {m->yEqualsFive(a_ptr, 1, 1);break;}
-            case 3: {m->yEqualsFive(a_ptr, 1, 0);break;}
+            case 0: {m->xEquals_120(a_ptr, 1);break;}
+            case 1: {m->xEquals_120(a_ptr, 0);break;}
+            case 2: {m->yEquals_120(a_ptr, 1);break;}
+            case 3: {m->yEquals_120(a_ptr, 0);break;}
             default: { cout << "Something is wrong with 5,5!" << endl; }
             }
         }
-        if(a.check(10,5)){
+        if(a.check(240,120)){
             switch(chooseThreePath){
-            case 0: {m->xEqualsTen(a_ptr, 1, 1);break;}
-            case 1: {m->xEqualsTen(a_ptr, 1, 0);break;}
-            case 2: {m->yEqualsFive(a_ptr, 1, 0);break;}
+            case 0: {m->xEquals_240(a_ptr, 1);break;}
+            case 1: {m->xEquals_240(a_ptr, 0);break;}
+            case 2: {m->yEquals_120(a_ptr, 0);break;}
             default: { cout << "Something is wrong with 10,5!" << endl; }
             }
         }
-        if(a.check(0,10)){
+        if(a.check(0,240)){
             switch(chooseTwoPath){
-            case 0: {m->yEqualsTen(a_ptr, 1, 1);break;}
-            case 1: {m->xEqualsZero(a_ptr, 1, 0);break;}
+            case 0: {m->yEquals_240(a_ptr, 1);break;}
+            case 1: {m->xEquals_0(a_ptr, 0);break;}
             default: { cout << "Something is wrong with 0,10!" << endl; }
             }
         }
-        if(a.check(5,10)){
+        if(a.check(120,240)){
             switch(chooseThreePath){
-            case 0: {m->xEqualsFive(a_ptr, 1, 0);break;}
-            case 1: {m->yEqualsTen(a_ptr, 1, 1);break;}
-            case 2: {m->yEqualsTen(a_ptr, 1, 0);break;}
+            case 0: {m->xEquals_120(a_ptr, 0);break;}
+            case 1: {m->yEquals_240(a_ptr, 1);break;}
+            case 2: {m->yEquals_240(a_ptr, 0);break;}
             default: { cout << "Something is wrong with 5,10!" << endl; }
             }            
         }
-        if(a.check(10,10)){
+        if(a.check(240,240)){
             switch(chooseTwoPath){
-            case 0: {m->xEqualsTen(a_ptr, 1, 0);break;}
-            case 1: {m->yEqualsTen(a_ptr, 1, 0);break;}
+            case 0: {m->xEquals_240(a_ptr, 0);break;}
+            case 1: {m->yEquals_240(a_ptr, 0);break;}
             default: { cout << "Something is wrong with 10,10!" << endl; }
             }            
         }
         else {}
         
     } while(counter < simulationTime);
-
+    
     //////////////////////////////////////////////////////////////////////
 
     ////////////////////////// Simulation Ends////////////////////////////

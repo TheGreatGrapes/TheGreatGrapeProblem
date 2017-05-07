@@ -7,6 +7,8 @@ Car::Car() // Instantiate initial position (x,y) = (0,0)
 {
     indexX = 0;
     indexY = 0;
+    VMAX = 4.0;
+    Acc = (VMAX * VMAX) / (2.0 * (dist / 3.0));
 }
 
 Car::Car(int x, int y) // Instantiate initial position (x,y)

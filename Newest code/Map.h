@@ -2,23 +2,34 @@
 #define MAP_H
 #include "Car.h"
 
+
+
 class Map {
 
 public:
     Map();
     ~Map();
+    
 
     //// Functions ////
 
 //////////////// Vertical Street ////////////////////
-    void xEqualsZero(Car*, int, bool); // x = 0
-    void xEqualsFive(Car*, int, bool); // x = 4
-    void xEqualsTen(Car*, int, bool);  // x = 8
+
+    void xEquals_0(Car*, bool); // x = 0
+    void xEquals_120(Car*, bool); // x = 4
+    void xEquals_240(Car*, bool);  // x = 8
 
 //////////////// Horizontal Street //////////////////
-    void yEqualsZero(Car*, int, bool); // y = 0
-    void yEqualsFive(Car*, int, bool); // y = 4
-    void yEqualsTen(Car*, int, bool);  // y = 8
+    void yEquals_0(Car*, bool); // y = 0
+    void yEquals_120(Car*, bool); // y = 4
+    void yEquals_240(Car*, bool);  // y = 8
+
+
+//////////////// Other Functions //////////////////
+    void checkDirX(Car* obj, double, bool);
+    void checkDirY(Car* obj, double, bool);
+    void printPos(Car *, double);
+
 };
 
 #endif // MAP_H
