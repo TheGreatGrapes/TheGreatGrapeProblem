@@ -2,7 +2,7 @@
 #include <iostream>
 #include <math.h>  
 #include "CarC.h"
-//#include "MapW.h"
+
 
 
 using namespace std;
@@ -18,6 +18,7 @@ using namespace std;
     Loc[1]=yPos;
     
     }*/
+    
 CarC::CarC(){
     
     xPos=0;
@@ -32,7 +33,6 @@ CarC::~CarC()
 {
 }
 
-void CarC::moveCar(MapW ob, float v){
-    ob.Path1(this , v);
-}
-*/
+//void CarC::moveCar(MapW ob, float v){
+    //ob.Path1(this , v);
+//}
