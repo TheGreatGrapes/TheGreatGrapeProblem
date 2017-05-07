@@ -11,8 +11,6 @@ public:
     ~Map();
     
 
-    //// Functions ////
-
 //////////////// Vertical Street ////////////////////
 
     void xEquals_0(Car*, bool); // x = 0
