@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2017-05-17T21:42:52
+# Project created by QtCreator 2017-06-04T15:35:34
 #
 #-------------------------------------------------
 
@@ -8,7 +8,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = TestTrafficSimulation
+TARGET = AnotherApproach
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -24,18 +24,22 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += main.cpp\
+        dialog.cpp \
+    path.cpp \
     pvector.cpp \
     vehicle.cpp \
-    dialog.cpp \
-    path.cpp
+    junctionpoint.cpp \
+    junction.cpp
 
-HEADERS  += \
+HEADERS  += dialog.h \
+    path.h \
     pvector.h \
     vehicle.h \
-    dialog.h \
-    path.h
+    junctionpoint.h \
+    junction.h
 
 FORMS    += dialog.ui
 
 DISTFILES += \
-    REAM_ME
+    READ_ME \
+    ../../../../Desktop/Screen Shot 2017-06-06 at 12.53.19 AM.png

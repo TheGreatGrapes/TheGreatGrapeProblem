@@ -1,7 +1,8 @@
 #ifndef MOVER_H
 #define MOVER_H
 #include "pvector.h"
-
+#include "stdlib.h"
+#include "time.h"
 
 class Mover
 {

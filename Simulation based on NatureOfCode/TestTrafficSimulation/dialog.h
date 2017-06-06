@@ -29,9 +29,10 @@ private:
     QGraphicsScene *scene;
     QTimer *timer;
 
-/////////// Commented Declearation ///////////
+/////////// My Declearation //////////////
 
-    //std::vector<Particle*> particles;
+    std::vector<Vehicle*> vehicles;
+    std::vector<Vehicle*> vehicles1;
     //Particle *p1;
     //Pvector *l;
     //Pvector *v;
@@ -44,19 +45,21 @@ private:
     //Pvector *repellForce;
 
     //ParticleSystem *ps;
+    //Vehicle *car,*car1;
     //Pvector *target;
-///////////// My Declearation //////////////
-
-    Vehicle *c;
-
     Path *p;
-
-    std::vector<Path*> paths;
+    Path *p1;
 
 
 private slots:
     void theLoop();
     void on_pushButton_clicked();
+    void drawStreets(Path*, QPen);
+
+    void createCars(std::vector<Vehicle*>&, int);
+    void drawCars(std::vector<Vehicle*>, QPen, QPen, QPen);
+
+
 };
 
 #endif // DIALOG_H

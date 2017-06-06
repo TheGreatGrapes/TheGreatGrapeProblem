@@ -10,47 +10,55 @@ class Vehicle
 {
 public:
     ///////////////// Constructor ///////////////
-    Vehicle();
+
     Vehicle(float, float, int, float);
 
     ////////////////// Variables ////////////////
+
     Pvector *location;
     Pvector *velocity;
     Pvector *acceleration;
-    Pvector *goal;
-
-    std::vector<Pvector> possibleDest;
-    std::vector<Vehicle*> cars;
-
-    int decision;
+    JunctionPoint *goal;
 
     float maxspeed;
     float maxforce;
+    int counter;
+
+    unsigned long tempGoal;
+    unsigned long tempVar;
+
+    std::vector<JunctionPoint> possibleDest;
 
     ////////////// Main Functions /////////////
+
+    void chooseJunction(Path*);
+    void makeTurn(Path*);
     void arrive();
     void seek(Pvector*);
     void applyForce(Pvector*);
+    void update();
+    void separate(std::vector<Vehicle*>);
 
     ////////////// Sub Functions /////////////
-    void update();
-    void stopAtJunction();
-    void chooseJunction(Path*);
+
+    void stopIfCloseEnough();
     void limit(Pvector *vec, float);
-    void addCars(float , float , int, float);
 
     float map(float, float, float, float, float);
 
-    bool ifAtJunction(Path*);
+    bool setGoal();
+    bool isArrived();
+    bool aboutToGo();
+    bool isAccessible(Path* , unsigned long, unsigned long);
+    bool isInOrOut(Path*, unsigned long, unsigned long, bool);
 
-    ////////////// Unused Variables /////////////
+    ////////////// Unused Stuff /////////////
     int id;
     float mass;
     float lifespan;
     bool direction;
 
-    //////////// Unused Functions /////////////
-    void follow(Path* p);
+    //void follow(Path* p);
 
 };
 

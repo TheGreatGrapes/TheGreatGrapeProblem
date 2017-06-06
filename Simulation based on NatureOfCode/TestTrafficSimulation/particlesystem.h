@@ -2,7 +2,6 @@
 #define PARTICLESYSTEM_H
 #include <vector>
 #include <pvector.h>
-#include <confetti.h>
 #include <repeller.h>
 #include "stdlib.h"
 #include "time.h"

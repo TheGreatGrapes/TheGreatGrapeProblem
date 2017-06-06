@@ -11,8 +11,6 @@ void ParticleSystem::addParticle()
     float y = rand() % 100 - 50;
     if (r >= 0.2){
         particles.push_back(new Particle(x, y, 1));
-    }else{
-        particles.push_back(new Confetti(x, y, 2));
     }
 }
 

@@ -7,16 +7,19 @@ class Path
 {
 public:
     Path();
-    Path(float,float,float,float);
-
-    Pvector *start;
-    Pvector *end;
-
+    //Pvector *start;
+    //Pvector *end;
     std::vector<Pvector*> points;
 
     float radius;
 
     void addPoints(float, float);
+
+    Pvector* getStart();
+    Pvector* getEnd();
+    int getSize();
+    Pvector* getPoint(int);
+
 };
 
 #endif // PATH_H

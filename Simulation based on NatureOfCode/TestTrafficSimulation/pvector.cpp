@@ -1,5 +1,7 @@
 #include "pvector.h"
 
+
+
 Pvector::Pvector(float _x, float _y)
 {
     x = _x;
@@ -13,8 +15,8 @@ void Pvector::add(Pvector *velo){
 }
 
 void Pvector::sub(Pvector *velo){
-    x += velo->x;
-    y += velo->y;
+    x -= velo->x;
+    y -= velo->y;
 }
 
 void Pvector::mult(float n){
@@ -44,7 +46,21 @@ Pvector Pvector::get(){
     return *v1;
 }
 
-///////////////// Static Functions //////////////////
+void Pvector::setMag(float x)
+{
+    this->normalize();
+    this->mult(x);
+}
+
+
+void Pvector::limit(float max){
+    if (this->mag() > max)
+    {
+        this->setMag(max);
+    }
+}
+
+///////////////// Static Functions //////////////////   Problem****
 Pvector* Pvector::add(Pvector* v1,Pvector* v2){
     Pvector* v3 = new Pvector(v1->x + v2->x, v1->y + v2->y);
     return v3;
@@ -75,18 +91,22 @@ float Pvector::angleBetween(Pvector* v1, Pvector* v2)
    return theta;
 }
 
-Pvector* Pvector::getNormalPoint(Pvector* p, Pvector* a, Pvector* b){
-    Pvector *ap = sub(p,a);
-    Pvector *ab = sub(b,a);
-
-    ab->normalize();
-    ab->mult(dot(ap,ab));
-
-    Pvector* normalPoint = add(a,ab);
-
-    return normalPoint;
-}
 
 float Pvector::dist(Pvector* a, Pvector* b){
     return sqrt(((a->x)-(b->x))*((a->x)-(b->x)) + ((a->y)-(b->y))*((a->y)-(b->y)));
 }
+
+
+Pvector* Pvector::getNormalPoint(Pvector* p, Pvector* a, Pvector* b)
+{
+    Pvector *ap = Pvector::sub(p, a);
+    Pvector *ab = Pvector::sub(b, a);
+
+    ab->normalize();
+    ab->mult(Pvector::dot(ap, ab));
+
+    Pvector *normalPoint = Pvector::add(a, ab);
+
+    return normalPoint;
+}
+
