@@ -32,11 +32,11 @@ void Junction::setStatus(){
     // Set accessable junction points (whether there is a street connected)
     for(unsigned long i = 0; i < subJunctions.size(); i ++){
 
-        if(subJunctions[i]->x > 210 || subJunctions[i]->x < -210)
+        if(subJunctions[i]->x > 410 || subJunctions[i]->x < -410)
         {
             subJunctions[i]->accessible = false;
         }
-        else if(subJunctions[i]->y > 210 || subJunctions[i]->y < -210)
+        else if(subJunctions[i]->y > 410 || subJunctions[i]->y < -410)
         {
             subJunctions[i]->accessible = false;
         }

@@ -18,31 +18,45 @@ public:
     Pvector *location;
     Pvector *velocity;
     Pvector *acceleration;
+    Pvector *mySteerForce;
     JunctionPoint *goal;
 
     float maxspeed;
     float maxforce;
+    float priority;
+
     int counter;
+    int onlyOnce;
+    int myCurrentGoal;
+
+    bool followSomeone;
 
     unsigned long tempGoal;
     unsigned long tempVar;
+    unsigned long whoIfollowed;
 
     std::vector<JunctionPoint> possibleDest;
+    std::vector<Pvector*> goals;
 
-    ////////////// Main Functions /////////////
+    ////////////// Behaviors /////////////
 
-    void chooseJunction(Path*);
-    void makeTurn(Path*);
-    void arrive();
-    void seek(Pvector*);
-    void applyForce(Pvector*);
-    void update();
-    void separate(std::vector<Vehicle*>);
+    virtual void move(std::vector<Vehicle *> ) = 0;           // Pure virtual function (Necessary to be overwritten)
+
+    virtual void arrive(std::vector<Vehicle *> );             // Normal virtual function (Not necessary to be overwritten)
+    virtual void follow();                                    // Normal virtual function (Not necessary to be overwritten)
+    virtual void findSomeoneInFront(std::vector<Vehicle *> ); // Normal virtual function (Not necessary to be overwritten)
+    virtual void separate(std::vector<Vehicle *> );           // Normal virtual function (Not necessary to be overwritten)
+    virtual void goToJunction();                              // Normal virtual function (Not necessary to be overwritten)
+
+    void chooseJunction(Path*);                               // Don't have to be virtual. Because all drivers share this common behavior/function
+    void makeTurn(Path*);                                     // Don't have to be virtual. Because all drivers share this common behavior/function
+    void seek(Pvector*);                                      // Don't have to be virtual. Because all drivers share this common behavior/function
+    void applyForce(Pvector*);                                // Don't have to be virtual. Because all drivers share this common behavior/function
+    void update();                                            // Don't have to be virtual. Because all drivers share this common behavior/function
 
     ////////////// Sub Functions /////////////
 
     void stopIfCloseEnough();
-    void limit(Pvector *vec, float);
 
     float map(float, float, float, float, float);
 
@@ -56,9 +70,6 @@ public:
     int id;
     float mass;
     float lifespan;
-    bool direction;
-
-    //void follow(Path* p);
 
 };
 

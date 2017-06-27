@@ -8,20 +8,11 @@ class Path
 {
 public:
     Path();
-    Path(float,float,float,float);
 
     std::vector<Junction*> mainJunctions;
 
+    void addMainJunctions(float, float);
 
-////////////// Unused Stuff ////////////////
-    float radius;
-
-    Pvector *start;
-    Pvector *end;
-
-    void addPoints(float, float);
-
-    std::vector<Pvector*> points;
 };
 
 #endif // PATH_H

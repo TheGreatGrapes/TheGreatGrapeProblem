@@ -29,14 +29,18 @@ SOURCES += main.cpp\
     pvector.cpp \
     vehicle.cpp \
     junctionpoint.cpp \
-    junction.cpp
+    junction.cpp \
+    normaldriver.cpp \
+    drunkdriver.cpp
 
 HEADERS  += dialog.h \
     path.h \
     pvector.h \
     vehicle.h \
     junctionpoint.h \
-    junction.h
+    junction.h \
+    normaldriver.h \
+    drunkdriver.h
 
 FORMS    += dialog.ui
 

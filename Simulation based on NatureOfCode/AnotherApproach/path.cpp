@@ -2,38 +2,37 @@
 
 Path::Path(){
 
-    /*
-    addPoints(-200, 200);
-    addPoints(   0, 200);
-    addPoints( 200, 200);
-    addPoints( 200,   0);
-    addPoints( 200,-200);
-    addPoints(   0,-200);
-    addPoints(-200,-200);
-    addPoints(-200,   0);
-    addPoints(   0,   0);
-    */
+    // Initial junctions (smaller map)
+    addMainJunctions(-200, 200);
+    addMainJunctions(   0, 200);
+    addMainJunctions( 200, 200);
+    addMainJunctions( 200,   0);
+    addMainJunctions( 200,-200);
+    addMainJunctions(   0,-200);
+    addMainJunctions(-200,-200);
+    addMainJunctions(-200,   0);
+    addMainJunctions(   0,   0);
 
-    mainJunctions.push_back(new Junction(-200, 200));
-    mainJunctions.push_back(new Junction(   0, 200));
-    mainJunctions.push_back(new Junction( 200, 200));
-    mainJunctions.push_back(new Junction( 200,   0));
-    mainJunctions.push_back(new Junction( 200,-200));
-    mainJunctions.push_back(new Junction(   0,-200));
-    mainJunctions.push_back(new Junction(-200,-200));
-    mainJunctions.push_back(new Junction(-200,   0));
-    mainJunctions.push_back(new Junction(   0,   0));
+    // Newly added junctions (Bigger map)
+    addMainJunctions(-400,-400);
+    addMainJunctions(-200,-400);
+    addMainJunctions(   0,-400);
+    addMainJunctions( 200,-400);
+    addMainJunctions( 400,-400);
+    addMainJunctions( 400,-200);
+    addMainJunctions( 400,   0);
+    addMainJunctions( 400, 200);
+    addMainJunctions(-400,-200);
+    addMainJunctions(-400,   0);
+    addMainJunctions(-400, 200);
+    addMainJunctions(-400, 400);
+    addMainJunctions(-200, 400);
+    addMainJunctions(   0, 400);
+    addMainJunctions( 200, 400);
+    addMainJunctions( 400, 400);
 }
 
-Path::Path(float start_x, float start_y, float end_x,float end_y)
+void Path::addMainJunctions(float x, float y)
 {
-    radius = 10;
-    start = new Pvector(start_x,start_y);
-    end = new Pvector(end_x,end_y);
-}
-
-
-void Path::addPoints(float x, float y){
-    Pvector* point = new Pvector(x, y);
-    points.push_back(point);
+    mainJunctions.push_back(new Junction(x,y));
 }

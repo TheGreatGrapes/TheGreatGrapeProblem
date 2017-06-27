@@ -5,7 +5,8 @@
 #include <QtCore>
 #include <QtGui>
 #include <QGraphicsScene>
-#include "vehicle.h"
+#include "drunkdriver.h"
+#include "normaldriver.h"
 #include "path.h"
 #include "junction.h"
 
@@ -47,6 +48,7 @@ private slots:
     void showJunctions(Path*, QPen, QPen);
 
     void on_pushButton_clicked();
+    void on_verticalSlider_valueChanged(int value);
 };
 
 #endif // DIALOG_H
