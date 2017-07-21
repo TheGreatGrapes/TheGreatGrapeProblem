@@ -30,6 +30,12 @@ Path::Path(){
     addMainJunctions(   0, 400);
     addMainJunctions( 200, 400);
     addMainJunctions( 400, 400);
+
+    Destinations.push_back(new Pvector( 380, 380));
+    Destinations.push_back(new Pvector( 120,-380));
+    Destinations.push_back(new Pvector(-320, 220));
+    Destinations.push_back(new Pvector(  80,  20));
+
 }
 
 void Path::addMainJunctions(float x, float y)

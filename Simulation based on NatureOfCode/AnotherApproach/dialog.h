@@ -7,6 +7,7 @@
 #include <QGraphicsScene>
 #include "drunkdriver.h"
 #include "normaldriver.h"
+#include "roamingdriver.h"
 #include "path.h"
 #include "junction.h"
 
@@ -43,8 +44,10 @@ private:
 private slots:
     void theLoop();
     void run(std::vector<Vehicle *> &, Path* );
+    void addExperiDriver(unsigned long);
     void drawMap(QPen,QPen);
     void drawCars(std::vector<Vehicle*> & , QPen , QPen , QPen , QPen , QPen);
+    void drawDest(Path*, QPen, QPen);
     void showJunctions(Path*, QPen, QPen);
 
     void on_pushButton_clicked();

@@ -5,13 +5,17 @@
 class DrunkDriver : public Vehicle
 {
 public:
-    DrunkDriver(float, float, int, float);
+    DrunkDriver(float, float, int, float, Path*);
 
     void move(std::vector<Vehicle *> ); // A function that describes the behavior of a drunk driver
                                         // The behavior is made of two simple functions: follow and separate.
+    void makeTurn(Path*);
+    void applyBehaviour(std::vector<Vehicle*> vehicles);
 
-    void follow();
-    void separate(std::vector<Vehicle *> );
+    Pvector* follow();
+    Pvector* separate(std::vector<Vehicle *> );
+
+    void calulateDist();
 
 };
 

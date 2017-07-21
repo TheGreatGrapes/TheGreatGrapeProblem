@@ -4,29 +4,43 @@
 
 ///////////////// Constructor ///////////////
 
-Vehicle::Vehicle(float x, float y, int _id, float v)
+Vehicle::Vehicle(float x, float y, int _id, float v, Path* p)
 {
+
     location = new Pvector(x,y);
     velocity = new Pvector(0,0);
     acceleration = new Pvector(0,0);
     mySteerForce = new Pvector(0,0);
-
-    goals.push_back(location);
-
+    longTermDest = new Pvector(0,0);
     goal = new JunctionPoint(0,0,0);    // A point that attracts agent
+
     counter = 0;                        // To make sure only one behavior is being carried out at a time
     maxforce= 0.5 * v;                  // Stronger the max force, more directly it's attracted
     maxspeed= v;                        // Higher the max speed, faster it goes
-    followSomeone = false;              // True if i am following someone
     myCurrentGoal = 0;                  // Work as an index pointing to the current goal in a vector
     onlyOnce = 0;                       // A variable that make sure an if-statement runs only once
     whoIfollowed = 0;                   // The index of the guy i am followed in terms of in an array(vector)
+    timesReached = 0;
+    timesTaken = 0;
 
+    // Behaviour weight
+    sepWeight = 0.5;
+    folWeight = 1;
+    arrWeight = 0.7;
+
+    reachedDest = false;
+    followSomeone = false;              // True if i am following someone
+
+    goals.push_back(location);
+
+    ///////// No Used Variable ////////
     id= _id;                            // Identity
-
-    lifespan =250;                      // No use
     mass = 1;                           // No use
 
+}
+
+Vehicle::~Vehicle()
+{
 
 }
 
@@ -126,7 +140,6 @@ void Vehicle::makeTurn(Path* p){
         }
         int options = this->possibleDest.size();
         int decision = rand() % options;
-        ;
 
         *(this->goal) = this->possibleDest[decision].get();
         this->possibleDest.clear();
@@ -139,97 +152,78 @@ void Vehicle::makeTurn(Path* p){
 }
 
 // Driving towards my goal (junction points), but follow someone when he is there (No too close to him though)
-void Vehicle::arrive(std::vector<Vehicle *> vehicles)
+Pvector* Vehicle::arrive(std::vector<Vehicle *> vehicles)
 {
-    if(followSomeone == false)                                   // Find someone if i am not following anyone
-    {
+    Pvector *sum = new Pvector(0,0);
+
+    if(followSomeone == false && goal->inOrOut == 0){
+
         findSomeoneInFront(vehicles);
+
+        // Find if anyone is in front of me
+        for(unsigned long i = 0; i < possibleCars.size(); i++){
+
+            float sameGoal = Pvector::dist(goal, possibleCars[i]->goal);
+            float tempD = 10000;
+
+            if(sameGoal == 0 && possibleCars[i]->goal->inOrOut == goal->inOrOut){
+
+                float myDistToThere = Pvector::dist(goal, location);
+                float hisDistToThere = Pvector::dist(possibleCars[i]->goal, possibleCars[i]->location);
+                //float myReachingTime = myDistToThere / velocity->mag();
+                //float hisReachingTime = hisDistToThere / possibleCars[i]->velocity->mag();
+                float distToHim = Pvector::dist(possibleCars[i]->location, location);
+
+                if(hisDistToThere < myDistToThere && distToHim < tempD){
+                    followSomeone = true;
+                    whoIfollowed = i;
+                    tempD = distToHim;
+                    //  if(possibleCars[i]->followSomeone == true && possibleCars[i]->possibleCars[possibleCars[i]->whoIfollowed]->id == id ){
+
+                }//else{
+            //}
+            }
+        }
     }
 
-    float distToSomeone = Pvector::dist( vehicles[whoIfollowed]->location, location); // check the distance and the guy driving ahead
 
-    if(followSomeone == true && velocity->mag() != 0)            // Stay where i am at the moment i find him
-    {
-        *mySteerForce = velocity->get();
-        mySteerForce->mult(-1);
-        applyForce(mySteerForce);
+    if(followSomeone == true && goal->inOrOut == 0){
 
-    }else if(followSomeone == true && distToSomeone < 30){       // Wait and do nothing until someone in front is already 30 pixel away
+        float distToSomeone = Pvector::dist( possibleCars[whoIfollowed]->location, location); // check the distance and the guy driving ahead
 
-    }else                                                        // Cannot not find anyone to follow? okay, then go where you planned to go
-    {
-        goToJunction();
-    }
-
-    // Ignore below commented code, Tim is experimenting something
-
-    /*if(followSomeone == false)                                   // Find someone if i am not following anyone
-    {
-        findSomeoneInFront(vehicles);
-    }
-
-    Pvector* pointToSomeone = Pvector::sub(vehicles[whoIfollowed]->location, location);
-    float distToSomeone = pointToSomeone->mag();
-    float angle = Pvector::angleBetween(velocity, pointToSomeone);
-    float sameGoal = Pvector::dist( vehicles[whoIfollowed]->goal, goal);
-
-    if(followSomeone == true && angle < 0.1 && velocity->mag() != 0 && sameGoal == 0)
-    {
-        *mySteerForce = velocity->get();
-        mySteerForce->mult(-1);
-        applyForce(mySteerForce);
-    }
-
-    else if( followSomeone == true && velocity->mag() != 0 && priority < vehicles[whoIfollowed]->priority)
-    {
-        *mySteerForce = velocity->get();
-        mySteerForce->mult(-1);
-        applyForce(mySteerForce);
-    }
-
-    else if( followSomeone == true && velocity->mag() != 0 && priority > vehicles[whoIfollowed]->priority)
-    {
-        follow();
-    }
-
-    else if( followSomeone == true && velocity->mag() != 0 && priority == vehicles[whoIfollowed]->priority)
-    {
-
-        float myDistToThere = Pvector::dist(goals[1], location);
-        float hisDistToThere = Pvector::dist(vehicles[whoIfollowed]->goals[1], vehicles[whoIfollowed]->location);
-
-        if(myDistToThere > hisDistToThere)
+        if(velocity->mag() != 0)            // Stay where i am at the moment i find him
         {
             *mySteerForce = velocity->get();
             mySteerForce->mult(-1);
             applyForce(mySteerForce);
-        }
-        else{
-            follow();
-        }
-    }
-    else if(followSomeone == true && velocity->mag() == 0 && distToSomeone < 30)         // Wait and do nothing until someone in front is already 30 pixel away
-    {
-        // *mySteerForce = vehicles[whoIfollowed]->velocity
-    }
-    else                                                        // Cannot not find anyone to follow? okay, then go where you planned to go
-    {
 
-        //goToJunction();
-        follow();
+        }else if(distToSomeone < 20){       // Wait and do nothing until someone in front is already 30 pixel away
+
+        }
+        else{                                                       // Cannot not find anyone to follow? okay, then go where you planned to go
+            sum = goToJunction();
+        }
+    }else{
+        sum = goToJunction();
     }
-    */
+
+    possibleCars.clear();
+    return sum;
+
 }
 
 
-void Vehicle::follow()
+Pvector* Vehicle::follow()   //is not a void function now
 {
 
     Pvector *here = new Pvector(0,0);
     *here = this->goals[myCurrentGoal]->get();
 
+    float worldRecord = 1000000;
+
     Pvector *there = new Pvector(0,0);
     *there = this->goals[myCurrentGoal + 1]->get();
+    Pvector *foll = new Pvector(0,0);
 
     Pvector predict = velocity->get();
     predict.normalize();
@@ -257,11 +251,17 @@ void Vehicle::follow()
     //float distance = Pvector::dist(normalPoint, predictLoc);
     //if(distance > 10)
     //{
-    seek(target);
+    if (worldRecord > 5)
+    {
+        foll = seek(target);
+
+    }
+    return foll;   //returns the force required to follow a path
+
     //}
 }
 
-void Vehicle::separate(std::vector<Vehicle*> vehicles)
+Pvector* Vehicle::separate(std::vector<Vehicle*> vehicles)    // is not a void function now
 {
     float desiredSeperation = 10 * 2; //5= radius of car object
     int tooClosecount =0;
@@ -303,15 +303,37 @@ void Vehicle::separate(std::vector<Vehicle*> vehicles)
             sum->setMag(maxspeed);
         }
 
-        Pvector *steer = Pvector::sub(sum, velocity);
-        steer->limit(maxforce);
-        applyForce(steer);
+        //Pvector *steer = Pvector::sub(sum, velocity);
+        //steer->limit(maxforce);
+        //applyForce(steer);
     }
-
+    if (sum->mag() > 0)
+    {
+        sum->setMag(maxspeed);
+        sum->sub(velocity);
+        sum->limit(maxforce);
+    }
+    return sum;   //returns the force vector to be applied
 }
 
+
+// Behaviour function (following and separation)   (overwritten for drunk drivers in drunkdriver class)
+void Vehicle::applyBehaviour(std::vector<Vehicle*> vehicles)
+{
+/*    Pvector* sep = separate(vehicles);
+    Pvector* foll = follow();
+
+    sep->mult(1);       //weight for seperate behaviour (high value will mean high consideration for *seperation*)
+    foll->mult(1);    //weight for follow behaviour (  "  *follow*)
+    //arr->mult(1.5);
+
+    applyForce(sep);
+    applyForce(foll);*/
+}
+
+
 // Go to my goal (junction points)
-void Vehicle::goToJunction(){
+Pvector* Vehicle::goToJunction(){
 
     Pvector *desired = Pvector::sub(this->goal, this->location);
 
@@ -320,7 +342,7 @@ void Vehicle::goToJunction(){
 
     if(d < 100)
     {
-        float m= map(d,0,100,0,maxspeed);
+        float m= map(d, 0, 100, 0, maxspeed);
         desired->mult(m);
     }
     else {
@@ -329,13 +351,14 @@ void Vehicle::goToJunction(){
 
     Pvector *steer = Pvector::sub(desired, this->velocity);
     steer->limit(maxforce);
-    applyForce(steer);
+    //applyForce(steer);
 
     followSomeone = false;
+    return steer;
 }
 
 
-void Vehicle::seek(Pvector* target)
+Pvector* Vehicle::seek(Pvector* target)
 {
     Pvector *desired = Pvector::sub(target, this->location);
     desired->normalize();
@@ -344,16 +367,20 @@ void Vehicle::seek(Pvector* target)
 
     Pvector *steer= Pvector::sub(desired, this->velocity);
     steer->limit(maxforce);
-    applyForce(steer);
+    //applyForce(steer);
 
     followSomeone = false;
+    return steer;
 }
+
+
+
 
 // Loop through all cars except myself, see if i can find someone driving ahead of me. If yes, then i will remember him.
 void Vehicle::findSomeoneInFront(std::vector<Vehicle *> vehicles){
 
-    float desiredSeperation = 20;                                                 // 5 = radius of car object
-    float tempD = 100000;
+    // Look around
+    float desiredSeperation = 18;                                                 // 5 = radius of car object
 
     for ( unsigned long i = 0 ; i < vehicles.size(); i++ )
     {
@@ -361,36 +388,11 @@ void Vehicle::findSomeoneInFront(std::vector<Vehicle *> vehicles){
         float angle = Pvector::angleBetween(velocity, pointToSomeone);
         float d = pointToSomeone->mag();
 
-        // if someone is driving ahead of me on the same street (pick the cloest someone), remember him
-        if( d != 0 && d <= desiredSeperation && angle == 0 && d < tempD){
+        if( d != 0 && d <= desiredSeperation && angle < 20){
 
-            followSomeone = true;
-            whoIfollowed = i;
-            tempD = d;
+            possibleCars.push_back(vehicles[i]);
         }
     }
-
-    // Ignore below commented code, Tim is experimenting something
-
-    /*
-    float desiredSeperation = 17;                                                 // 5 = radius of car object
-    float tempD = 100000;
-
-    for ( unsigned long i = 0 ; i < vehicles.size(); i++ )
-    {
-        Pvector *pointToSomeone = Pvector::sub( vehicles[i]->location, location); // Calculate vector pointing to neighbor
-        float angle = Pvector::angleBetween(velocity, pointToSomeone);
-        float d = pointToSomeone->mag();
-
-        // if someone is driving ahead of me on the same street (pick the cloest someone), remember him
-        if( d != 0 && d <= desiredSeperation && angle < 10 && d < tempD){
-
-            followSomeone = true;
-            whoIfollowed = i;
-            tempD = d;
-        }
-    }
-*/
 }
 
 
@@ -408,6 +410,57 @@ void Vehicle::update()
     acceleration->mult(0);
 
     stopIfCloseEnough();
+
+}
+/*
+void Vehicle::makeNewDest(Path* p)
+{
+    float tmpDist = Pvector::dist(location, destination);
+    int tmpMain = 0;
+
+    if((tmpDist < 20) or (destination->x == 1000 and destination->y==1000) ){
+
+        do{
+
+            tmpMain = rand() % p->mainJunctions.size();
+
+            tmpDist = Pvector::dist(p->mainJunctions[tmpMain]->junLocation, location);
+
+        }while(tmpDist < 300);
+
+        for(unsigned long i = 0; i < p->mainJunctions[tmpMain]->subJunctions.size(); i++){
+
+            // check only the "drive in" points in this junction and if they are accesssible
+            if(isInOrOut(p, this->tempGoal, i, 1) && isAccessible(p, tmpMain, i)){
+
+                JunctionPoint point = p->mainJunctions[tmpMain]->subJunctions[i]->get();
+
+                possibleDest.push_back(point); // randomly choose one junction points, and set it as goal
+            }
+        }
+        int options = possibleDest.size();
+
+        float tmpSub = rand() % options;
+
+        *destination = possibleDest[tmpSub].get();
+
+        timesReached++;
+
+        possibleDest.clear();
+
+    }
+
+    if(timesReached >= 5){
+        reachedDest = true;
+    }
+}
+*/
+
+void Vehicle::setInitDest(Path* p)
+{
+    unsigned long size = p->Destinations.size();
+    int ran = rand() % size;
+    *longTermDest = p->Destinations[ran]->get();
 }
 
 ///////////////// Sub Functions ///////////////

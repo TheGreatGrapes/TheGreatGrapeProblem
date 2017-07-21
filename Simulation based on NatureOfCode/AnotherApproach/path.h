@@ -9,6 +9,8 @@ class Path
 public:
     Path();
 
+    std::vector<Pvector*> Destinations;
+
     std::vector<Junction*> mainJunctions;
 
     void addMainJunctions(float, float);

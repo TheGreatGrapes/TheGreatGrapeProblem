@@ -11,7 +11,8 @@ class Vehicle
 public:
     ///////////////// Constructor ///////////////
 
-    Vehicle(float, float, int, float);
+    Vehicle(float, float, int, float, Path*);
+    ~Vehicle();
 
     ////////////////// Variables ////////////////
 
@@ -20,43 +21,56 @@ public:
     Pvector *acceleration;
     Pvector *mySteerForce;
     JunctionPoint *goal;
+    Pvector* longTermDest;
 
     float maxspeed;
     float maxforce;
-    float priority;
+
+    float sepWeight;
+    float folWeight;
+    float arrWeight;
 
     int counter;
     int onlyOnce;
     int myCurrentGoal;
+    int timesReached;
 
     bool followSomeone;
+    bool reachedDest;
+
+    unsigned long timesTaken;
 
     unsigned long tempGoal;
     unsigned long tempVar;
     unsigned long whoIfollowed;
 
     std::vector<JunctionPoint> possibleDest;
+    std::vector<Vehicle*> possibleCars;
     std::vector<Pvector*> goals;
 
     ////////////// Behaviors /////////////
 
     virtual void move(std::vector<Vehicle *> ) = 0;           // Pure virtual function (Necessary to be overwritten)
+    virtual void applyBehaviour(std::vector<Vehicle*>) = 0;   // Pure virtual function (Necessary to be overwritten)
 
-    virtual void arrive(std::vector<Vehicle *> );             // Normal virtual function (Not necessary to be overwritten)
-    virtual void follow();                                    // Normal virtual function (Not necessary to be overwritten)
+    virtual Pvector *arrive(std::vector<Vehicle *> );             // Normal virtual function (Not necessary to be overwritten)
+    virtual Pvector *follow();                                    // Normal virtual function (Not necessary to be overwritten)
     virtual void findSomeoneInFront(std::vector<Vehicle *> ); // Normal virtual function (Not necessary to be overwritten)
-    virtual void separate(std::vector<Vehicle *> );           // Normal virtual function (Not necessary to be overwritten)
-    virtual void goToJunction();                              // Normal virtual function (Not necessary to be overwritten)
+    virtual Pvector *separate(std::vector<Vehicle *> );           // Normal virtual function (Not necessary to be overwritten)    
+    virtual Pvector *seek(Pvector*);
+    virtual Pvector *goToJunction();                              // Normal virtual function (Not necessary to be overwritten)
 
     void chooseJunction(Path*);                               // Don't have to be virtual. Because all drivers share this common behavior/function
-    void makeTurn(Path*);                                     // Don't have to be virtual. Because all drivers share this common behavior/function
-    void seek(Pvector*);                                      // Don't have to be virtual. Because all drivers share this common behavior/function
+    virtual void makeTurn(Path*);                                     // Don't have to be virtual. Because all drivers share this common behavior/function
+                                     // Don't have to be virtual. Because all drivers share this common behavior/function
     void applyForce(Pvector*);                                // Don't have to be virtual. Because all drivers share this common behavior/function
     void update();                                            // Don't have to be virtual. Because all drivers share this common behavior/function
+    //void makeNewDest(Path*);
 
     ////////////// Sub Functions /////////////
 
     void stopIfCloseEnough();
+    void setInitDest(Path*);
 
     float map(float, float, float, float, float);
 
@@ -69,7 +83,6 @@ public:
     ////////////// Unused Stuff /////////////
     int id;
     float mass;
-    float lifespan;
 
 };
 

@@ -31,7 +31,8 @@ SOURCES += main.cpp\
     junctionpoint.cpp \
     junction.cpp \
     normaldriver.cpp \
-    drunkdriver.cpp
+    drunkdriver.cpp \
+    roamingdriver.cpp
 
 HEADERS  += dialog.h \
     path.h \
@@ -40,7 +41,8 @@ HEADERS  += dialog.h \
     junctionpoint.h \
     junction.h \
     normaldriver.h \
-    drunkdriver.h
+    drunkdriver.h \
+    roamingdriver.h
 
 FORMS    += dialog.ui
 
